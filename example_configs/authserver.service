@@ -3,14 +3,15 @@ Description=uWSGI Authentication Server Emperor
 After=syslog.target
 
 [Service]
-ExecStart=/usr/local/bin/uwsgi --ini /opt/eset/AuthenticationServer/uwsgi.ini
-# Requires systemd version 211 or newer
+ExecStart=/usr/local/bin/uwsgi --emperor /opt/eset/AuthenticationServer/
 RuntimeDirectory=authserver
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
 StandardError=syslog
 NotifyAccess=all
+User=nginx
+Group=nginx
 
 [Install]
 WantedBy=multi-user.target

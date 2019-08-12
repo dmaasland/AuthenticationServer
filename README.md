@@ -30,7 +30,7 @@ python3 generate_key.py
 ## Configuring nginx
 Copy the example config over to the nginx 'conf.d' directory:
 ```shell
-cp example_configs/nginx.conf /etc/nginx/conf.d/authserver.conf
+cp example_configs/authserver.conf /etc/nginx/conf.d/authserver.conf
 ```
 
 Add port 3537 to the selinux policy:
@@ -68,3 +68,35 @@ Comment out the default server block in '/etc/nginx/nginx.conf' so that it looks
 
 [..]
 ```
+
+## Configure Authentication Server
+Copy the systemd service file:
+```shell
+cp example_configs/authserver.service /etc/systemd/system/authserver.service
+```
+
+## Enable and start services
+Enable and start the services:
+```shell
+systemctl enable nginx
+systemctl enable authserver
+systemctl start authserver
+systemctl start nginx
+```
+
+## Open firwall ports
+Create persistent iptables rules:
+```shell
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp --dport 3537 -j ACCEPT
+ip6tables -A INPUT -m conntrack --ctstate NEW -p tcp --dport 3537 -j ACCEPT
+service iptables save
+service ip6tables save
+```
+
+## Test
+To test if everything is working, open your browser and go to:
+```
+http://<esmc>:3537
+```
+
+If everything is working, you should see the public key you can use to configure network authentication!
