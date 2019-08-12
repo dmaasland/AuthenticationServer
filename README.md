@@ -25,3 +25,46 @@ pip3 install -r requirements.txt
 Generate the RSA key:
 ```shell
 python3 generate_key.py
+```
+
+## Configuring nginx
+Copy the example config over to the nginx 'conf.d' directory:
+```shell
+cp example_configs/nginx.conf /etc/nginx/conf.d/authserver.conf
+```
+
+Add port 3537 to the selinux policy:
+```shell
+semanage port -a -t http_port_t -p tcp 3537
+```
+
+Comment out the default server block in '/etc/nginx/nginx.conf' so that it looks like this:
+```shell
+[..]
+    include /etc/nginx/conf.d/*.conf;
+
+#    server {
+#        listen       80 default_server;
+#        listen       [::]:80 default_server;
+#        server_name  _;
+#        root         /usr/share/nginx/html;
+#
+#        # Load configuration files for the default server block.
+#        include /etc/nginx/default.d/*.conf;
+#
+#        location / {
+#        }
+#
+#        error_page 404 /404.html;
+#            location = /40x.html {
+#        }
+#
+#        error_page 500 502 503 504 /50x.html;
+#            location = /50x.html {
+#        }
+#    }
+
+# Settings for a TLS enabled server.
+
+[..]
+```
