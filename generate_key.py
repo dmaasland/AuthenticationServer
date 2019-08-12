@@ -24,8 +24,8 @@ def main():
 
         chown(
             key_dir,
-            'www-data',
-            'www-data'
+            'nginx',
+            'nginx'
         )
 
         chmod(
@@ -49,8 +49,8 @@ def main():
         # Set permissions
         chown(
             key_file,
-            'www-data',
-            'www-data'
+            'nginx',
+            'nginx'
         )
 
         chmod(
