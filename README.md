@@ -75,6 +75,13 @@ Copy the systemd service file:
 cp example_configs/authserver.service /etc/systemd/system/authserver.service
 ```
 
+Change the network name to match your network in:
+```
+authserver.conf
+```
+
+This can be any name you like, just make sure to use the same name everywhere when setting up network authentication.
+
 ## Enable and start services
 Enable and start the services:
 ```shell
