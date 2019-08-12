@@ -9,38 +9,21 @@ class AuthenticationServer:
         # Initialize variables
         self.key    = None
         self.public = None
-        self.key_file = config['PRIVATE_KEY']
         self.network_name = config['NETWORK_NAME']
+        self.key_file = path.join(
+            path.dirname(path.abspath(__file__)),
+            '../'
+            'keys',
+            'authserver.pem'
+        )
 
         # Load keys
-        self.check_keys()
+        self.load_key()
 
-    def check_keys(self):
-        # Create key if it does not exist
-        if not path.isfile(self.key_file):
-            self.key = RSA.generate(
-                4096
+    def load_key(self):
+        with open(self.key_file, 'rb') as f:
+            self.key = RSA.import_key(
+                f.read()
             )
-
-            # Write keys to file
-            pem = self.key.export_key(
-                'PEM'
-            )
-
-            with open(self.key_file, 'wb') as f:
-                f.write(pem)       
-
-            # Set permissions
-            chmod(
-                path=self.key_file,
-                mode=0o400
-            )
-
-        else:
-            # Load existing key from file
-            with open(self.key_file, 'rb') as f:
-                self.key = RSA.import_key(
-                    f.read()
-                )
 
         self.public = self.key.publickey()
